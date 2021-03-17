@@ -32,7 +32,6 @@ export function Transaction() {
                 <tbody>
                     {
                         transactions.map(transaction => {
-                            console.log(transaction.amount)
                             return (
                                 <tr key={transaction.id}>
                                     <td>{transaction.title}</td>
