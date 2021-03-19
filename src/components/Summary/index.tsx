@@ -8,6 +8,30 @@ import { TransactionsContext } from '../../TransactionsContext';
 export function Summary() {
     const { transactions } = useContext(TransactionsContext);
 
+    // const totalDeposits = transactions.reduce((acc, transaction) => {
+    //     if (transaction.type === 'deposit') {
+    //         return acc + transaction.amount;
+    //     }
+
+    //     return acc;
+    // }, 0)
+
+    const summary = transactions.reduce((acc, transaction) => {
+        if (transaction.type === 'deposit') {
+            acc.deposits += transaction.amount;
+            acc.total += transaction.amount;
+        } else {
+            acc.withdraws += transaction.amount;
+            acc.total -= transaction.amount;
+        }
+
+        return acc;
+    }, {
+        deposits: 0,
+        withdraws: 0,
+        total: 0
+    })
+
     return (
         <Container>
             <div>
@@ -15,21 +39,36 @@ export function Summary() {
                     <p>Incomes</p>
                     <img src={incomeImg} alt="Income" />
                 </header>
-                <strong>£1000.00</strong>
+                <strong>
+                    {new Intl.NumberFormat('en-GB', {
+                        style: 'currency',
+                        currency: 'GBP'
+                    }).format(summary.deposits)}
+                </strong>
             </div>
             <div>
                 <header>
                     <p>Outcomes</p>
                     <img src={outcomeImg} alt="Outcome" />
                 </header>
-                <strong>- £500.00</strong>
+                <strong>-
+                    {new Intl.NumberFormat('en-GB', {
+                    style: 'currency',
+                    currency: 'GBP'
+                }).format(summary.withdraws)}
+                </strong>
             </div>
             <div className="highlight-background">
                 <header>
                     <p>Total</p>
                     <img src={totalImg} alt="Income" />
                 </header>
-                <strong>£500.00</strong>
+                <strong>
+                    {new Intl.NumberFormat('en-GB', {
+                        style: 'currency',
+                        currency: 'GBP'
+                    }).format(summary.total)}
+                </strong>
             </div>
         </Container>
     )
